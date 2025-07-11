@@ -31,7 +31,6 @@ const ChatWindow = () => {
 
     const fetchReceiver = async () => {
       await axios.get(`/v1/messages/g/${username}`).then((response) => {
-        console.log('res in console',response.data.data)
         setReceiverData(response.data.data)
     })
     }
@@ -39,7 +38,7 @@ const ChatWindow = () => {
     
 
 
-  }, [ sendedmessage]);
+  }, [username, sendedmessage]);
 
   const onsubmit = async (data) => {
     await axios.post(`/v1/messages/${username}`,data).then((response) => {
@@ -61,7 +60,6 @@ const ChatWindow = () => {
       </div>
       )}
       
-
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-2 text-white">
         {messages.map((msg, index) => (

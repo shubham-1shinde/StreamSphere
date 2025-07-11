@@ -42,6 +42,73 @@ const totalVideoLikes = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, totalLikes, "total video likes fetched successfully"))
 })
 
+
+const getUserIsLiked = asyncHandler(async(req, res) => {
+    
+    const {videoId} = req.params;
+    const {commentId } = req.params;
+    const {tweetId } = req.params;
+
+    if(videoId) {
+        const liked = await Like.findOne({video: videoId, likedBy: req.user._id})
+        if(liked) {
+            const isLiked = true;
+            return res
+            .status(200)
+            .json(
+                new ApiResponse(200, isLiked, "User isLiked to video fetched successfully")
+            )
+        } else {
+            const isLiked = false;
+            return res
+            .status(200)
+            .json(
+                new ApiResponse(200, isLiked, "User isLiked to video fetched successfully") 
+            )
+        }
+
+    }
+
+    if (commentId) {
+        const liked = await Like.findOne({comment: commentId}, {likedBy: req.user._id})
+        if(liked) {
+            const isLiked = true;
+            return res
+            .status(200)
+            .json(
+                new ApiResponse(200, isLiked, "User isLiked to comment fetched successfully")
+            )
+        } else {
+            const isLiked = false;
+            return res
+            .status(200)
+            .json(
+                new ApiResponse(200, isLiked, "User isLiked to comment fetched successfully") 
+            )
+        }
+    }
+
+    if (tweetId) {
+        const liked = await Like.findOne({tweet: tweetId}, {likedBy: req.user._id})
+        if(liked) {
+            const isLiked = true;
+            return res
+            .status(200)
+            .json(
+                new ApiResponse(200, isLiked, "User isLiked to tweet fetched successfully")
+            )
+        } else {
+            const isLiked = false;
+            return res
+            .status(200)
+            .json(
+                new ApiResponse(200, isLiked, "User isLiked to tweet fetched successfully") 
+            )
+        }
+    }
+    
+})
+
 const toggleCommentLike = asyncHandler(async (req, res) => {
     const {commentId} = req.params
     //TODO: toggle like on comment
@@ -163,4 +230,5 @@ export {
     totalVideoLikes,
     totalCommentsLikes,
     totalTweetsLikes,
+    getUserIsLiked,
 }

@@ -31,8 +31,13 @@ const getChatSidebar = asyncHandler(async (req, res) => {
 
     const receiverList = await Message.aggregate([
         {
+            $match: {
+                sender: req.user._id,
+            }
+        },
+        {
             $group: {
-            _id: "$receiver"
+            _id: "$receiver" // group by receiver ID
             }
         },
         {

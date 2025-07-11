@@ -248,7 +248,6 @@ const changeCurrentPassword = asyncHandler(async(req, res) => {
     .json(new ApiResponse(200, {}, "Password changed successfully"))
 })
 
-
 const getCurrentUser = asyncHandler(async(req, res) => {
     return res
     .status(200)
@@ -349,7 +348,6 @@ const updateUserCoverImage = asyncHandler(async(req, res) => {
         new ApiResponse(200, user, "Cover image updated successfully")
     )
 })
-
 
 const getUserChannelProfile = asyncHandler(async(req, res) => {
     const {username} = req.params
@@ -475,7 +473,6 @@ const getUserIsSubscribed = asyncHandler(async(req, res) => {
 
     
 })
-
 
 const getWatchHistory = asyncHandler(async(req, res) => {
     const user = await User.aggregate([

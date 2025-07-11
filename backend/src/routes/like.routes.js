@@ -7,6 +7,7 @@ import {
     totalVideoLikes,
     totalCommentsLikes,
     totalTweetsLikes,
+    getUserIsLiked,
 } from "../controllers/like.controller.js"
 import {verifyJWT} from "../middlewares/auth.middleware.js"
 
@@ -20,5 +21,6 @@ router.route("/videos/:videoId").get(totalVideoLikes);
 router.route("/comments/:commentId").get(totalCommentsLikes);
 router.route("/tweets/:tweetId").get(totalTweetsLikes);
 router.route("/videos").get(getLikedVideos);
+router.route("/isliked/:videoId").get(getUserIsLiked);
 
 export default router

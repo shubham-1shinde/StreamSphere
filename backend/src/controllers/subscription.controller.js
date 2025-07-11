@@ -11,9 +11,6 @@ import { Video } from "../models/video.model.js"
 const toggleSubscription = asyncHandler(async (req, res) => {
     const {videoId} = req.params;
     const {username } = req.params;
-    if (!username?.trim()) {
-        throw new ApiError(400, "username is missing")
-    }
     //console.log(videoId)
     // TODO: toggle subscription
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import axios from "axios";
 import { useState } from "react";
 import { useForm } from 'react-hook-form';
@@ -12,15 +12,16 @@ const Video = () => {
 // pending clear foem after adding comment
 // and update comment
     const navigate = useNavigate();
+    const hasViewed = useRef(false)
     const [video, setVideo] = useState([]);
     const [upNextVideos, setUpNextVideos] = useState([]);
     const [addComment, setaddComment] = useState("");
     const [deleteComment, setdeleteComment] = useState("");
     const [comments, setComments] = useState([]);
-    const [isUserSubscribed, setIsUserSubscribed] = useState(false);
     const [isVideoLiked, setisVideoLiked] = useState(false);
+    const [isCommentLiked, setisCommentLiked] = useState(false);
     const [videoTotalLikes, setVideoTotalLikes] = useState(false);
-    const [viewCount, setViewCount] = useState([]);
+    const [toggleLike, setToggleLike] = useState([]);
     const {videoId} = useParams();
     const userData = useSelector((state) => state.auth.userData);
     const {
@@ -30,8 +31,8 @@ const Video = () => {
       } = useForm();
 
     useEffect(() => {
-
-      let isMounted = true;                 
+              
+      let isMounted = true; 
 
       const fetchVideo = async () => {
         try {
@@ -74,35 +75,36 @@ const Video = () => {
       };
       fetchComment();
 
-      const addView = async () => {
-        try {
-          const res = await axios.get(`/v1/videos/a/${videoId}`).then((response) => {
-            if (isMounted) {
-              setViewCount(response.data.data.views);
-              console.log(response.data.data.views);
-            } 
-          });     
-        } catch (err) {
-          console.error("Failed to fetch views:", err);
-        }
-      };
-      addView();
+      const fetchLikes = async () => {
+        const likes = await axios.get(`/v1/likes/videos/${videoId}`);
+        const isLiked = await axios.get(`/v1/likes/isliked/${videoId}`);
+        console.log("totallikes",likes.data.data)
+        setVideoTotalLikes(likes.data.data);
+        console.log("isliked",isLiked.data.data)
+        setisVideoLiked(isLiked.data.data);
+      }
+      fetchLikes();
 
       return () => {
         isMounted = false;                     
       };
-    }, [addComment, deleteComment, isVideoLiked]);    
+
+    }, [addComment, deleteComment, toggleLike]);    
 
     useEffect(() => {
 
       let isMounted = true;                 
 
       const addView = async () => {
-        try {
-          const res = await axios.get(`/v1/videos/a/${videoId}`)   
-        } catch (err) {
-          console.error("Failed to fetch views:", err);
+        if (!hasViewed.current) {
+          try {
+            const res = await axios.get(`/v1/videos/a/${videoId}`)
+            hasViewed.current = true   
+          } catch (err) {
+            console.error("Failed to fetch views:", err);
+          }
         }
+        
       };
       addView();
 
@@ -110,18 +112,6 @@ const Video = () => {
         isMounted = false;                     
       };
     }, []);    
-/*
-  useEffect(() => {
-  const fetchISSubscriptionStatus = async () => {
-    try {
-      const res = await axios.get(`/v1/users/c/`);
-      setIsUserSubscribed(res.data.data.isSubscribed);
-    } catch (err) {
-      console.error("Failed to fetch subscription status:", err);
-    }
-  };
-  fetchISSubscriptionStatus();
-}, []);*/
 
 
   const onSubmit = async(data) => {
@@ -167,29 +157,6 @@ const Video = () => {
                 <p className="text-sm text-gray-400">2.02M subscribers</p>
               </div>
             </button>
-            
-            {/*<button 
-              className="ml-4 px-4 py-1 bg-white text-black rounded-full font-semibold" 
-              onClick={async() => {
-                const res = await axios.post(`/v1/subscriptions/c/${videoId}`)
-                
-                //console.log("resp is", resp);
-                if(res.data.message === "Subscribed to channel successfully") {
-                    const resp = await axios.get(`/v1/users/g/${videoId}`)
-                    console.log(res.data.message)
-                    setIsUserSubscribed(resp.data.data);
-                    console.log("isusersubscribed", resp.data.data);
-                    return <ToastNotification message= "res.data.message" onClose="2000" />
-                } else {
-                    const resp = await axios.get(`/v1/users/g/${videoId}`)
-                    console.log(res.data.message)
-                    setIsUserSubscribed(resp.data.data);
-                    console.log("isusersubscribed", resp.data.data);
-                } 
-              }}
-            >
-              {isUserSubscribed === true ? (<p>Subscribed</p>) : (<p>Subscribe</p>)}
-            </button>*/}
             <SubscribeBtn videoId={videoId}/>
           </div>
 
@@ -197,16 +164,8 @@ const Video = () => {
             <button className="bg-gray-800 px-4 py-1 rounded-lg"
             onClick={async() => {
                 const res = await axios.post(`/v1/likes/toggle/v/${videoId}`)
-                const likes = await axios.get(`/v1/likes/videos/${videoId}`)
-                setVideoTotalLikes(likes.data.data);
-                if(res.data.message === "Like added successfully on video") {
-                    console.log(res.data.message)
-                    setisVideoLiked(true)
-                    return (<SuccessToast message={res.data.message}  />)
-                } else {
-                    console.log(res.data.message)
-                    setisVideoLiked(false)
-                } 
+                console.log("toggleLike",res.data.data)
+                setToggleLike(res.data.data)
             }}
             >
               {isVideoLiked === true ? (
@@ -243,7 +202,10 @@ const Video = () => {
           </div>
 
         <div className="space-y-4 w-full">
-            {comments.map((c, i) => (
+            {comments.map((c, i) => {
+
+              
+              return (
               <div key={i} className="flex gap-3 ">
                 <div className="w-full flex justify-between items-center">
                     <p className="text-sm">{c.content}</p>
@@ -291,7 +253,8 @@ const Video = () => {
                     
                 </div>
               </div>
-            ))}
+            )
+            } )}
           </div>
           </div>
       </div>

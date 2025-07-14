@@ -2,9 +2,11 @@ import VideoCard from "../components/VideoCard";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Loading from "../components/Loading";
 const Home = () => {
 
   const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(true);
    
     const navigate = useNavigate();
     useEffect(() => {
@@ -12,10 +14,12 @@ const Home = () => {
 
     const fetchVideos = async () => {
       try {
-        const res =  axios.get("/v1/").then((response) => {
+        axios.get("/v1/")
+        .then((response) => {
           if (isMounted) setVideos(response.data.data); 
           console.log("Fetched videos:", response.data.data);
-        });     // update state only if still mounted
+        })
+        .finally(() => setLoading(false))     
       } catch (err) {
         console.error("Failed to fetch videos:", err);
       }
@@ -28,7 +32,7 @@ const Home = () => {
     };
   }, []);    
 
-  return (
+  return !loading ? (
     <main className="p-6 w-full bg-[#0f0f0f] min-h-screen">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {videos.map((video, index) => (
@@ -41,7 +45,7 @@ const Home = () => {
         ))}
       </div>
     </main>
-  );
+  ) : (<Loading />)
 };
 
 export default Home;

@@ -4,10 +4,12 @@ import { Link, NavLink } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
 import TweetCard from "../components/TweetCard";
+import Loading from "../components/Loading";
 
 function Tweet () {
   const [tweet, setTweet] = useState([]);
   const [tweets, setTweets] = useState([[]]);
+  const [loading, setLoading] = useState(true);
 
   const {
       register,
@@ -27,8 +29,10 @@ function Tweet () {
   useEffect(() => {
     const fetchTweets = async () => {
         try {
-            const res = await axios.get("/v1/tweets/");
-            setTweets(res.data.data);
+            await axios.get("/v1/tweets/")
+            .then((response) => setTweets(response.data.data))
+            .finally(() => setLoading(false));
+            
         } catch (error) {
             
         }
@@ -36,7 +40,7 @@ function Tweet () {
     fetchTweets();
   },[tweet])
 
-  return (
+  return !loading ? (
     <div className="min-h-screen w-full pl-5 pr-5 mx-auto bg-black text-white font-sans">
       <div className="flex sticky top-0 w-full z-10 bg-black">
         <NavLink 
@@ -88,7 +92,7 @@ function Tweet () {
       }
       
     </div>
-  );
+  ) : (<Loading/>)
 }
 
 

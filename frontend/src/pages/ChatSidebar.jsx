@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Outlet, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useState } from "react";
+import Loading from "../components/Loading";
 
 const chats = [
   {
@@ -40,20 +41,23 @@ const chats = [
 const Chats = () => {
 
   const [chatList, setChatList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
 
     const fetchChatSidebarList = async () => {
-      await axios.get('/v1/messages/').then((response) => {
+      await axios.get('/v1/messages/')
+      .then((response) => {
         setChatList(response.data.data)
         console.log('Chat sidebar list fetched', response.data.data)
       })
+      .finally(() => setLoading(false));
     }
     fetchChatSidebarList();
   },[])
 
-  return (
+  return !loading ? (
     <div className="flex">
         <aside className="w-[370px] bg-[#111b21] h-screen text-white border-r border-gray-700 overflow-y-auto">
         {/* Header */}
@@ -113,7 +117,7 @@ const Chats = () => {
     </div>
     
     
-  );
+  ) : (<Loading/>)
 };
 
 export default Chats;

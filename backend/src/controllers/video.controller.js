@@ -15,6 +15,7 @@ const AllVideos = asyncHandler(async (req, res) => {
     const videos = await Video.aggregate([
         {
             $match:{
+                isPublished: true
             }
         },
         {
@@ -83,7 +84,7 @@ const upNextVideos = asyncHandler(async (req, res) => {
     )
 })
 
-const getAllVideos = asyncHandler(async (req, res) => {
+const getMyAllVideos = asyncHandler(async (req, res) => {
     const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.query
     //TODO: get all videos based on query, sort, pagination
 
@@ -455,7 +456,6 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
         }
 
     const publishStatus = video.isPublished;
-    console.log("publishStatus: ", publishStatus);
     
     if(publishStatus){
         const changePublishStaus = await Video.findByIdAndUpdate(
@@ -495,7 +495,7 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
 
 export {
     AllVideos,
-    getAllVideos,
+    getMyAllVideos,
     publishAVideo,
     getVideoById,
     updateVideo,

@@ -6,6 +6,7 @@ import Footer from "./footer/Footer.jsx"
 import Sidebar from "./sidebar/Sidebar.jsx"
 import { Outlet } from 'react-router-dom'
 import axios from "axios";
+import Loading from './components/Loading.jsx'
 
 
 function App() {
@@ -17,16 +18,15 @@ function App() {
     let isMounted = true;   
     const fun = async () => {
       await axios.get("/v1/users/current-user")
-    .then((response) => {
-      const userData = response.data.data
-      if (userData) {
-          dispatch(login({userData}));
-      } else {
-          dispatch(logout());
-      }
-    })
-    .finally(() => setLoading(false))
-    }
+      .then((response) => {
+        const userData = response.data.data
+        if (userData) {
+            dispatch(login({userData}));
+        } else {
+            dispatch(logout());
+        }
+      })
+      .finally(() => setLoading(false))}
 
     fun();
 
@@ -50,10 +50,7 @@ function App() {
       </div>
     </div>
     </>
-  ) :
-    (<div className="flex items-center justify-center h-screen">
-      <div className="w-16 h-16 border-4 border-purple-800 border-t-transparent rounded-full animate-spin"></div>
-    </div>)
+  ) : (<Loading/>)
 }
 
 export default App

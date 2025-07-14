@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
+import Loading from "../components/Loading";
 
 
 const ChatWindow = () => {
@@ -14,6 +15,7 @@ const ChatWindow = () => {
   const [sendedmessage, setSendedmessage] = useState([]);
   const [messages, setmessages] = useState([]);
   const [receiverData, setReceiverData] = useState();
+  const [loading, setLoading] = useState(true);
   const {
       register,
       handleSubmit,
@@ -22,10 +24,12 @@ const ChatWindow = () => {
 
   useEffect(() => {
     const fetchChatWindow = async () => {
-      await axios.get(`/v1/messages/${username}`).then((response) => {
+      await axios.get(`/v1/messages/${username}`)
+      .then((response) => {
       console.log('res is',response.data.data)
-     setmessages(response.data.data)
-    })
+      setmessages(response.data.data)
+      })
+      .finally(() => setLoading(false));
     }
     fetchChatWindow();
 
@@ -46,7 +50,7 @@ const ChatWindow = () => {
     })
   }
 
-  return (
+  return !loading ? (
     <div className="flex-1 flex flex-col h-full w-full bg-gray-800">
       {receiverData && (
         <div className="h-16 px-4 flex items-center justify-between bg-[#202c33] text-white border-l border-gray-700">
@@ -98,7 +102,7 @@ const ChatWindow = () => {
         
       </div>
     </div>
-  );
+  ) : (<Loading/>)
 };
 
 export default ChatWindow;

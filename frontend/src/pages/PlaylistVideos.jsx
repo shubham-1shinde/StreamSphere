@@ -1,20 +1,22 @@
 import VideoCard from "../components/VideoCard";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loading from "../components/Loading";
-const Home = () => {
+
+function PlaylistVideos() {
 
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const {playlistId} = useParams();
    
     const navigate = useNavigate();
     useEffect(() => {
-    let isMounted = true;                    // guard against setting state after unmount
+    let isMounted = true;                    
 
     const fetchVideos = async () => {
       try {
-        await axios.get("/v1/")
+        await axios.get(`/v1/playlist/g/${playlistId}`)
         .then((response) => {
           if (isMounted) setVideos(response.data.data); 
           console.log("Fetched videos:", response.data.data);
@@ -28,7 +30,7 @@ const Home = () => {
     fetchVideos();
 
     return () => {
-      isMounted = false;                     // cleanup
+      isMounted = false;                     
     };
   }, []);    
 
@@ -48,4 +50,4 @@ const Home = () => {
   ) : (<Loading />)
 };
 
-export default Home;
+export default PlaylistVideos;

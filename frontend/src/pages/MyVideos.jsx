@@ -15,7 +15,8 @@ function MyVideos() {
 
     const fetchVideos = async () => {
       try {
-        const res =  axios.get("/v1/videos/").then((response) => {
+        await axios.get("/v1/videos/")
+        .then((response) => {
           if (isMounted) setVideos(response.data.data); 
           console.log("Fetched videos:", response.data.data);
         })

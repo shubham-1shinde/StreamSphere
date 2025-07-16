@@ -24,6 +24,8 @@ import UploadVideo from './pages/UploadVideo.jsx'
 import ChatSidebar from './pages/ChatSidebar.jsx'
 import ChatWindow from './pages/ChatWindow.jsx'
 import EmptyChat from './pages/EmptyChat.jsx'
+import Playlist from './pages/Playlist.jsx'
+import PlaylistVideos from './pages/PlaylistVideos.jsx'
 
 const router = createBrowserRouter([
   {
@@ -107,6 +109,22 @@ const router = createBrowserRouter([
           <AuthLayout authentication={true}>
           <Tweet />
          </AuthLayout>
+        ),
+      },
+      {
+        path: "/playlist/",
+        element: (
+          <AuthLayout authentication={true}>
+          <Playlist />
+         </AuthLayout>
+        ),
+      },
+      {
+        path: "/playlist/g/:playlistId",
+        element: (
+          <AuthLayout authentication={true}>
+          <PlaylistVideos />
+        </AuthLayout>
         ),
       },
       {

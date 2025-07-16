@@ -75,7 +75,7 @@ const Sidebar = () => {
 
               <li className='h-12 w-32 rounded-3xl hover:bg-slate-800'>
                 <NavLink 
-                to="/grok"
+                to="/playlist"
                 className={({isActive}) =>
                     ` ${isActive ? "font-bold" : ""}`
                 }>

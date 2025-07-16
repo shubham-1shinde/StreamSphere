@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ToastNotification from "../components/ToastNotification.jsx"
 import { Trash, ArrowUpToLine, Heart,} from 'lucide-react';
 import SubscribeBtn from "../components/SubscribeBtn.jsx";
+import Loading from "../components/Loading.jsx";
 const Video = () => {
 
 // pending clear foem after adding comment
@@ -24,6 +25,8 @@ const Video = () => {
     const [toggleLike, setToggleLike] = useState([]);
     const {videoId} = useParams();
     const userData = useSelector((state) => state.auth.userData);
+    const [userPlaylists, setUserPlaylists] = useState([]);
+    const [loading, setLoading] = useState(true);
     const {
         register,
         handleSubmit,
@@ -36,13 +39,15 @@ const Video = () => {
 
       const fetchVideo = async () => {
         try {
-          const res = await axios.get(`/v1/videos/${videoId}`).then((response) => {
+          await axios.get(`/v1/videos/${videoId}`)
+          .then((response) => {
             if (isMounted) setVideo(response.data.data); 
             console.log("Fetched videos:", response.data.data);
-          }); 
+          })
+          .finally(() => setLoading(false));
           
-          const resp = await axios.post(`/v1/users/a/${videoId}`)
-          console.log("resp",resp)
+          await axios.post(`/v1/users/a/${videoId}`)
+
         } catch (err) {
           console.error("Failed to fetch video:", err);
         }
@@ -51,13 +56,12 @@ const Video = () => {
 
       const fetchUpNextVideo = async () => {
         try {
-          const res = await axios.get(`/v1/videos/upnext/${videoId}`).then((response) => {
+          await axios.get(`/v1/videos/upnext/${videoId}`)
+          .then((response) => {
             if (isMounted) setUpNextVideos(response.data.data); 
             console.log("Fetched upnext videos:", response.data.data);
           }); 
-          
-          /*const resp = await axios.post(`/v1/users/a/${videoId}`)
-          console.log("resp",resp)*/
+
         } catch (err) {
           console.error("Failed to fetch video:", err);
         }
@@ -66,7 +70,8 @@ const Video = () => {
 
       const fetchComment = async () => {
         try {
-          const res = await axios.get(`/v1/comments/${videoId}`).then((response) => {
+          await axios.get(`/v1/comments/${videoId}`)
+          .then((response) => {
             if (isMounted) setComments(response.data.data); 
           });     
         } catch (err) {
@@ -123,7 +128,14 @@ const Video = () => {
     setFormData(initialState); // 🔄 Clear the form
   }
 
-  return (
+  const addToPlaylistClicked = async () => {
+    await axios.get(`/v1/playlist/user/${userData._id}`)
+    .then((response) => {
+      setUserPlaylists(response.data.data)
+    })
+  }
+
+  return !loading ? (
     
     <div className="flex flex-col lg:flex-row bg-black text-white min-h-screen">
       {video.map ((v, i) => (<div key={i} className="flex-1 p-4">
@@ -174,6 +186,20 @@ const Video = () => {
             </button>
             <button className="bg-gray-800 px-4 py-1 rounded-lg">Share</button>
             <button className="bg-gray-800 px-4 py-1 rounded-lg">Download</button>
+            <button className="bg-gray-800 px-4 py-1 rounded-lg" onClick={addToPlaylistClicked}>
+              Add to Playlist
+            </button>
+            {userPlaylists && (<div>
+              {userPlaylists.map((p,i) => (
+                <>
+                <button key={i} onClick={async() => {
+                  await axios.patch(`/v1/playlist/add/${videoId}/${p._id}`).then((response) => {
+                    console.log(response.data.data)
+                  })
+                }}>{p.name}</button>
+                </>
+              ))}
+            </div>)}
           </div>
         </div>
         {/* Description */}
@@ -285,7 +311,7 @@ const Video = () => {
         ))}
       </aside>
     </div>
-  );
+  ) : (<Loading/>)
 };
 
 export default Video;

@@ -10,15 +10,21 @@ import { app } from "./app.js";
 
 
 
-connectDB().then(() => {
-  app.listen(process.env.PORT || 8000, () => {
-  console.log(`⚙️ Server is running at port : ${process.env.PORT}`);
-})
-}) .catch((err) => {
-   console.log("MONGO db connection failed !!! ", err);
-})
+// Example route
+app.get("/", (req, res) => {
+  res.send("✅ Serverless Express is running on Vercel!");
+});
 
-module.exports = app;
+// ✅ Connect to DB once when function initializes
+await connectDB().catch((err) => {
+  console.error("❌ MongoDB connection failed:", err);
+});
+
+// ✅ Export a serverless handler instead of app.listen()
+export const handler = serverless(app);
+
+// Also export default if Vercel expects it
+export default handler;
 
 
 

@@ -1,52 +1,67 @@
-import axios from 'axios';
-import React from 'react';
-import { useState } from 'react';
-import { FaRegComment, FaRetweet, FaHeart, FaChartBar, FaBookmark, FaShare } from 'react-icons/fa';
+import axios from "axios";
+import React, { useState } from "react";
+import {
+  FaRegComment,
+  FaHeart,
+  FaChartBar,
+} from "react-icons/fa";
 
-function TweetCard({_id, content, fullName, username, avatar, createdAt},) {
-    const tweetId = _id;
-    const [isTweetLiked, setIsTweetLiked] = useState(false);
-    const [totalTweetLikes, setTotalTweetLikes] = useState(0);
+function TweetCard({ _id, content, fullName, username, avatar, createdAt }) {
+  const tweetId = _id;
+  const [isTweetLiked, setIsTweetLiked] = useState(false);
+  const [totalTweetLikes, setTotalTweetLikes] = useState(0);
+
   return (
-    <div className="flex space-x-3 bg-black text-white p-4 border-b border-gray-700">
+    <div className="flex space-x-3 bg-gradient-to-br from-[#0a0a0a] via-[#111111] to-[#1a1a1a] text-white p-5 border-b border-gray-800 hover:bg-[#1b1b1b]/70 transition-all duration-300 cursor-pointer rounded-xl">
+      {/* Avatar */}
       <img
-        src={avatar} 
-        className="w-10 h-10 rounded-full"
+        src={avatar}
+        alt="User Avatar"
+        className="w-12 h-12 rounded-full object-cover border border-gray-700 hover:border-blue-500 transition-all duration-300"
       />
+
+      {/* Tweet Content */}
       <div className="flex-1">
-        <div className="flex items-center space-x-1 text-sm">
-          <span className="font-bold"> {fullName} </span>
-          <span className="text-gray-400">@{username} · {createdAt}</span>
+        <div className="flex items-center space-x-2 text-sm">
+          <span className="font-semibold text-white hover:text-blue-400 transition-colors duration-200">
+            {fullName}
+          </span>
+          <span className="text-gray-500">@{username} • {createdAt}</span>
         </div>
-        <p className="mt-1 text-lg">
+
+        <p className="mt-2 text-[15px] leading-relaxed text-gray-200">
           {content}
         </p>
-        <div className="flex justify-between text-gray-500 mt-3 text-sm">
-          <div className="flex items-center space-x-1"> 
-          {
-            <button onClick={async () => {
-                const res = await axios.post(`/v1/likes/toggle/t/${tweetId}`)
-                if(res.data.message === "Like added successfully on tweet") {
-                    setIsTweetLiked(true)
-                    const resp = await axios.get(`/v1/likes/tweets/${tweetId}`)
-                    console.log('resp is:',resp.data.data)
-                    setTotalTweetLikes(resp.data.data)
-                } else {
-                    setIsTweetLiked(false)
-                    const resp = await axios.get(`/v1/likes/tweets/${tweetId}`)
-                    console.log('resp is:',resp.data.data)
-                    setTotalTweetLikes(resp.data.data)
-                }
-                
-            }}>
-            {isTweetLiked === true ? (
-               <div className="flex justify-center items-center gap-4"><FaHeart className='text-pink-600'/> <p>{totalTweetLikes}</p></div> ) : (<div className="flex justify-center items-center gap-4"><FaHeart/> <p>{totalTweetLikes}</p></div>)}   
 
-            </button>
-          }
+        {/* Action Row */}
+        <div className="flex justify-between text-gray-400 mt-4 text-sm max-w-md">
+          {/* Like */}
+          <button
+            onClick={async () => {
+              const res = await axios.post(`/v1/likes/toggle/t/${tweetId}`);
+              const resp = await axios.get(`/v1/likes/tweets/${tweetId}`);
+              setTotalTweetLikes(resp.data.data);
+              setIsTweetLiked(res.data.message === "Like added successfully on tweet");
+            }}
+            className="flex items-center gap-2 hover:text-pink-500 transition-colors duration-200"
+          >
+            <FaHeart
+              className={`transition-transform duration-300 ${
+                isTweetLiked ? "text-pink-600 scale-110" : "text-gray-400"
+              }`}
+            />
+            <span>{totalTweetLikes}</span>
+          </button>
+
+          {/* Comments */}
+          <div className="flex items-center gap-2 hover:text-blue-400 transition-colors duration-200">
+            <FaRegComment /> <span>7K</span>
           </div>
-          <div className="flex items-center space-x-1"><FaRegComment /> <span>7K</span></div>
-          <div className="flex items-center space-x-1"><FaChartBar /> <span>7.9M</span></div>
+
+          {/* Views */}
+          <div className="flex items-center gap-2 hover:text-green-400 transition-colors duration-200">
+            <FaChartBar /> <span>7.9M</span>
+          </div>
         </div>
       </div>
     </div>

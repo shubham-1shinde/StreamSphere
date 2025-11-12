@@ -1,123 +1,100 @@
-import React from "react";
-import { useEffect } from "react";
-import { Outlet, useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Loading from "../components/Loading";
 
-const chats = [
-  {
-    name: "Me ✨❤️ (You)",
-    message: "✔✔ 110687",
-    time: "02-07-2025",
-    isPinned: true,
-    avatar: "https://i.pravatar.cc/40?u=me",
-  },
-  {
-    name: "Mahesh Mama ❤️⚡",
-    message: "Br br",
-    time: "21:32",
-    avatar: "https://i.pravatar.cc/40?u=mahesh",
-  },
-  {
-    name: "Ajay💥",
-    message: "Changle sang",
-    time: "21:28",
-    avatar: "https://i.pravatar.cc/40?u=ajay",
-  },
-  {
-    name: "Careasa Web Development Team",
-    message: "Soham: Join in!!",
-    time: "21:02",
-  },
-  {
-    name: "+91 90222 98275",
-    message: "✔✔ Sir, I am in nanded so can my friend...",
-    time: "20:57",
-  },
-  
-];
-
 const Chats = () => {
-
   const [chatList, setChatList] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-
     const fetchChatSidebarList = async () => {
-      await axios.get('/v1/messages/')
-      .then((response) => {
-        setChatList(response.data.data)
-        console.log('Chat sidebar list fetched', response.data.data)
-      })
-      .finally(() => setLoading(false));
-    }
+      try {
+        const res = await axios.get("/v1/messages/");
+        setChatList(res.data.data);
+        console.log("Chat sidebar list fetched", res.data.data);
+      } catch (err) {
+        console.error("Failed to fetch chat list", err);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchChatSidebarList();
-  },[])
+  }, []);
 
   return !loading ? (
-    <div className="flex">
-        <aside className="w-[370px] bg-[#111b21] h-screen text-white border-r border-gray-700 overflow-y-auto">
+    <main className="min-h-screen max-w-8xl ml-60 bg-gradient-to-br from-[#0f0f0f] via-[#1a1a40] to-[#3b82f6] text-white flex font-sans">
+      {/* Sidebar */}
+      <aside className="w-[370px] backdrop-blur-lg bg-black/40 border-r border-gray-800 h-screen overflow-y-auto shadow-2xl">
         {/* Header */}
-        <div className="px-4 py-3 border-b border-gray-700 text-lg font-bold">
-          Chats
+        <div className="px-5 py-4 border-b border-gray-700 text-xl font-semibold bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-md">
+          💬 Chats
         </div>
 
-        {/* Search */}
-        <div className="px-4 py-2">
+        {/* Search Bar */}
+        <div className="px-4 py-3 border-b border-gray-800">
           <input
             type="text"
             placeholder="Search or start a new chat"
-            className="w-full px-3 py-2 bg-[#202c33] text-sm text-white rounded-md placeholder-gray-400 focus:outline-none"
+            className="w-full px-4 py-2 bg-black/40 border border-gray-700 rounded-full text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
         {/* Chat List */}
-        <div>
-          {chatList.map((chat, index) => (
-            <div
-              key={index}
-              className=""
-            >
-              <button 
-              className="flex w-full items-center gap-3 px-4 py-3 hover:bg-[#2a3942] cursor-pointer border-b border-[#202c33]"
-              onClick={() => {
-                navigate(`/chats/message/${chat.username}`)
-              }}>
-                <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-600 flex-shrink-0">
-                {chat.avatar ? (
-                  <img
-                    src={chat.avatar}
-                    alt={chat.fullName}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-sm">
-                    👤
-                  </div>
-                )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex justify-between">
-                  <span className="font-medium truncate">{chat.fullName}</span>
-                  <span className="text-xs text-gray-400"></span>
+        <div className="divide-y divide-gray-800">
+          {chatList.length > 0 ? (
+            chatList.map((chat, index) => (
+              <button
+                key={index}
+                className="w-full flex items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-600/30 hover:to-purple-600/30 hover:scale-[1.02]"
+                onClick={() => navigate(`/chats/message/${chat.username}`)}
+              >
+                {/* Avatar */}
+                <div className="w-11 h-11 rounded-full overflow-hidden bg-gradient-to-r from-gray-700 to-gray-900 flex-shrink-0 shadow-md">
+                  {chat.avatar ? (
+                    <img
+                      src={chat.avatar}
+                      alt={chat.fullName}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-300 text-lg">
+                      👤
+                    </div>
+                  )}
                 </div>
-                <p className="text-sm text-gray-400 truncate"></p>
-              </div>
-              </button>
-              
-            </div>
-          ))}
-        </div>
-        </aside>
 
-        <div className="w-full h-full"> <Outlet/> </div>
-    </div>
-    
-    
-  ) : (<Loading/>)
+                {/* Chat Info */}
+                <div className="flex-1 min-w-0 text-left">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium truncate">
+                      {chat.fullName}
+                    </span>
+                    <span className="text-xs text-gray-400">🟢</span>
+                  </div>
+                  <p className="text-sm text-gray-400 truncate">
+                    {chat.lastMessage || "Start chatting..."}
+                  </p>
+                </div>
+              </button>
+            ))
+          ) : (
+            <p className="text-gray-400 text-center py-8">
+              No chats yet. Start a conversation! 💫
+            </p>
+          )}
+        </div>
+      </aside>
+
+      {/* Chat Content */}
+      <section className="flex-1 backdrop-blur-xl bg-black/30 h-screen overflow-hidden">
+        <Outlet />
+      </section>
+    </main>
+  ) : (
+    <Loading />
+  );
 };
 
 export default Chats;

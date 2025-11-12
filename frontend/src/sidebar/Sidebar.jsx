@@ -1,140 +1,57 @@
-import { Home, Heart, History, Video, Folder, User, MessageCircleIcon} from 'lucide-react';
-import { Link, NavLink } from 'react-router-dom';
+import {
+  Home,
+  Heart,
+  History,
+  Video,
+  Folder,
+  User,
+  MessageCircleIcon,
+} from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
-  /*const navItems = [
-    { icon: <Home />, label: 'Home' },
-    { icon: <Heart />, label: 'Liked Videos' },
-    { icon: <History />, label: 'History' },
-    { icon: <Video />, label: 'My Content' },
-    { icon: <Folder />, label: 'Collections' },
-    { icon: <User />, label: 'Subscriptions' },
-    { icon: <User />, label: 'Tweets' },
-  ];*/
-
   return (
-    <aside className="bg-black text-white w-60 min-h-screen p-4 space-y-2 pt-4">
-      <div className="text-xl font-bold mt-4 flex items-center gap-2">
-        
+    <aside className="fixed left-0 top-0 h-screen w-60 bg-gradient-to-b from-[#111827] via-[#1e1b4b] to-[#0f172a] text-white shadow-2xl backdrop-blur-xl border-r border-white/10 p-5 flex flex-col">
+      {/* Logo */}
+      <div className="text-3xl font-extrabold text-center tracking-wide bg-gradient-to-r from-fuchsia-400 via-purple-400 to-blue-400 bg-clip-text text-transparent mb-8">
+        Streamify
       </div>
 
-       <div>
-            <ul className='flex flex-col gap-1'>
+      {/* Navigation */}
+      <ul className="flex flex-col gap-2">
+        {[
+          { to: "/", icon: <Home />, label: "Home" },
+          { to: "/videos/", icon: <Video />, label: "My Content" },
+          { to: "/likes/videos", icon: <Heart />, label: "Liked Videos" },
+          { to: "/users/history", icon: <History />, label: "History" },
+          { to: "/playlist", icon: <Folder />, label: "Playlist" },
+          { to: "/subscriptions/u/", icon: <User />, label: "Subscriptions" },
+          { to: "/tweets/", icon: <User />, label: "Tweets" },
+          { to: "/chats/", icon: <MessageCircleIcon />, label: "Chats" },
+        ].map(({ to, icon, label }) => (
+          <li key={to}>
+            <NavLink
+              to={to}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-4 py-2 rounded-2xl font-medium text-gray-300 transition-all duration-300
+                ${
+                  isActive
+                    ? "bg-gradient-to-r from-purple-500 via-blue-500 to-teal-400 text-white shadow-md scale-[1.02]"
+                    : "hover:bg-white/10 hover:text-white"
+                }`
+              }
+            >
+              <div className="flex-shrink-0">{icon}</div>
+              <span>{label}</span>
+            </NavLink>
+          </li>
+        ))}
+      </ul>
 
-              <li className='h-12 w-36 rounded-3xl hover:bg-slate-800'>
-                <NavLink 
-                to="/"
-                className={({isActive}) =>
-                    ` ${isActive ? "font-bold" : ""}`
-                }>
-                  <div className='h-12 w-36 flex justify-between'>
-                    <div className='h-12 w-12 flex justify-center items-center'> <Home /> </div>
-                    <div className='h-12 w-20 flex  items-center'><p className='text-xl'>Home</p></div>
-                  </div>
-                </NavLink>
-              </li>
-
-              <li className='h-12 w-36 rounded-3xl hover:bg-slate-800'>
-                <NavLink 
-                to="/videos/"
-                className={({isActive}) =>
-                    ` ${isActive ? "font-bold" : ""}`
-                }>
-                  <div className='h-12 w-52 flex justify-between'>
-                    <div className='h-12 w-12 flex justify-center items-center'><Video /> </div>
-                    <div className='h-12 w-36 flex  items-center'><p className='text-xl'>My Content</p></div>
-                  </div>
-                </NavLink>
-              </li>
-
-              <li className='h-12 w-48 rounded-3xl hover:bg-slate-800'>
-                <NavLink 
-                to="/likes/videos"
-                className={({isActive}) =>
-                    ` ${isActive ? "font-bold" : ""}`
-                }>
-                  <div className='h-12 w-52 flex justify-between'>
-                    <div className='h-12 w-12 flex justify-center items-center'> <Heart/> </div>
-                    <div className='h-12 w-36 flex  items-center'><p className='text-xl'>Liked Videos</p></div>
-                  </div>
-                </NavLink>
-              </li>
-              
-              <li className='h-12 w-40 rounded-3xl hover:bg-slate-800'>
-                <NavLink 
-                to="/users/history"
-                className={({isActive}) =>
-                    ` ${isActive ? "font-bold" : ""}`
-                }>
-                  <div className='h-12 w-40 flex justify-between'>
-                    <div className='h-12 w-12 flex justify-center items-center'> <History /> </div>
-                    <div className='h-12 w-24 flex  items-center'><p className='text-xl'>History</p></div>
-                  </div>
-                </NavLink>
-              </li>
-
-              <li className='h-12 w-32 rounded-3xl hover:bg-slate-800'>
-                <NavLink 
-                to="/playlist"
-                className={({isActive}) =>
-                    ` ${isActive ? "font-bold" : ""}`
-                }>
-                  <div className='h-12 w-40 flex justify-between'>
-                    <div className='h-12 w-12 flex justify-center items-center'><Folder /> </div>
-                    <div className='h-12 w-24 flex  items-center'><p className='text-xl'>Playlist</p></div>
-                  </div>
-                </NavLink>
-              </li>
-
-              <li className='h-12 w-48 rounded-3xl hover:bg-slate-800'>
-                <NavLink 
-                to="/subscriptions/u/"
-                className={({isActive}) =>
-                    ` ${isActive ? "font-bold" : ""}`
-                }>
-                  <div className='h-12 w-40 flex justify-between'>
-                    <div className='h-12 w-12 flex justify-center items-center'> <User /> </div>
-                    <div className='h-12 w-24 flex  items-center'><p className='text-xl'>Subscriptions</p></div>
-                  </div>
-                </NavLink>
-              </li>
-
-              <li className='h-12 w-40 rounded-3xl hover:bg-slate-800'>
-                <NavLink 
-                to="/tweets/"
-                className={({isActive}) =>
-                    ` ${isActive ? "font-bold" : ""}`
-                }>
-                  <div className='h-12 w-40 flex justify-between'>
-                    <div className='h-12 w-12 flex justify-center items-center'> <User /> </div>
-                    <div className='h-12 w-24 flex  items-center'><p className='text-xl'>Tweets</p></div>
-                  </div>
-                </NavLink>
-              </li>
-
-              <li className='h-12 w-48 rounded-3xl hover:bg-slate-800'>
-                <NavLink 
-                to="/chats/"
-                className={({isActive}) =>
-                    ` ${isActive ? "font-bold" : ""}`
-                }>
-                  <div className='h-12 w-48 flex justify-between'>
-                    <div className='h-12 w-12 flex justify-center items-center'> <MessageCircleIcon  /> </div>
-                    <div className='h-12 w-32 flex items-center'><p className='text-xl'>Chats</p></div>
-                  </div>
-                </NavLink>
-              </li>
-
-
-            </ul>
-          </div>
-
-      {/*navItems.map((item, index) => (
-        <button key={index} className="w-full flex items-center gap-3 p-2 rounded hover:bg-purple-600">
-          {item.icon}
-          {item.label}
-        </button>
-      ))*/}
+      {/* Footer */}
+      <div className="mt-auto text-center text-sm text-gray-500 border-t border-white/10 pt-4">
+        © 2025 Streamify
+      </div>
     </aside>
   );
 };

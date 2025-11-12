@@ -45,7 +45,6 @@ function App() {
         <Sidebar />
         <div className="flex flex-col w-full">
           <Outlet />
-          <Footer />
         </div>
       </div>
     </div>

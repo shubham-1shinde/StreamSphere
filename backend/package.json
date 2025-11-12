@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon src/index.js",
-    "start": "node  src/index.js",
-    "vercel-start": "node src/index.js"
+    "dev": "nodemon index.js",
+    "start": "node  index.js",
+    "vercel-start": "node index.js"
   },
   "keywords": [
     "node",

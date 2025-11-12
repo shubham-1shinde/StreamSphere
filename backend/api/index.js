@@ -1,6 +1,6 @@
 import serverless from "serverless-http";
-import { app } from "../backend/app.js";
-import connectDB from "../backend/db/connect.js";
+import { app } from "../app.js";
+import connectDB from "../db/database.js";
 
 await connectDB();
 

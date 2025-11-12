@@ -6,38 +6,17 @@ dotenv.config({
 import connectDB from "./db/database.js";
 import { app } from "./app.js";
 
-let iConnected = false;
-
-async function connectToMongoDB() {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    iConnected = true;
-    console.log("✅ MongoDB Connected Successfully");
-  } catch (err) {
-    console.error("❌ MongoDB Connection Error:", err);
-  }
-}
-
-app.use((req, res, next) => {
-  if (!iConnected) {
-    connectToMongoDB();
-  }
-  next();
-});
 
 
-//connectDB()
-//.then(() => {
-//    app.listen(process.env.PORT || 8000, () => {
-//       console.log(`⚙️ Server is running at port : ${process.env.PORT}`);
-//    })
-//})
-//.catch((err) => {
-//   console.log("MONGO db connection failed !!! ", err);
-//})
+
+
+connectDB().then(() => {
+  app.listen(process.env.PORT || 8000, () => {
+  console.log(`⚙️ Server is running at port : ${process.env.PORT}`);
+})
+}) .catch((err) => {
+   console.log("MONGO db connection failed !!! ", err);
+})
 
 module.exports = app;
 

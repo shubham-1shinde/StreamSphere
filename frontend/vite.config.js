@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   server: {
     proxy: {
-      '/v1': 'http://localhost:8000/api',  // backend mdhe routes /api/vi/...  pasun chalu hotat mnun v1 la aapn proxy sarkh use karu sakta toch v1 la frontend la as a proxy use karaych
+      '/v1': 'https://stream-sphere-lal2.vercel.app/api',  // backend mdhe routes /api/vi/...  pasun chalu hotat mnun v1 la aapn proxy sarkh use karu sakta toch v1 la frontend la as a proxy use karaych
     },
   },
   plugins: [react(),tailwindcss()],

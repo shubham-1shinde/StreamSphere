@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+axios.defaults.withCredentials = true;
 import { login } from '../store/authSlice';
 
 function Signin() {

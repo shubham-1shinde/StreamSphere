@@ -12,7 +12,7 @@ function Playlist() {
   useEffect(() => {
     const fetchPlaylists = async () => {
       await axios
-        .get(`/v1/playlist/user/${userData._id}`)
+        .get(`${import.meta.env.VITE_BACKEND_URL}/v1/playlist/user/${userData._id}`)
         .then((response) => {
           setUserPlaylists(response.data.data);
         })

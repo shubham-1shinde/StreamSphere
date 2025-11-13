@@ -17,7 +17,7 @@ function App() {
   useEffect( () => {
     let isMounted = true;   
     const fun = async () => {
-      await axios.get("/v1/users/current-user")
+      await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/users/current-user`)
       .then((response) => {
         const userData = response.data.data
         if (userData) {

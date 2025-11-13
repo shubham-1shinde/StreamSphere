@@ -22,7 +22,7 @@ function UploadVideo() {
     formData.append("isPublished", data.isPublished);
 
     try {
-      const response = await axios.post("/v1/videos/", formData);
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/v1/videos/`, formData);
       if (response) {
         console.log("Upload success:", response.data);
         navigate("/videos/");

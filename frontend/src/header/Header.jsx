@@ -14,7 +14,7 @@ const Header = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post("/v1/videos/search", data);
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/v1/videos/search`, data);
       const message = response.data.message;
       if (message === "Searched video details fetched successfully") {
         navigate(`/videos/${response.data.data[0]._id}`);

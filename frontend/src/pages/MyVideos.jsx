@@ -15,7 +15,7 @@ function MyVideos() {
 
     const fetchVideos = async () => {
       try {
-        await axios.get("/v1/videos/")
+        await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/videos/`)
           .then((response) => {
             if (isMounted) setVideos(response.data.data);
             console.log("Fetched videos:", response.data.data);

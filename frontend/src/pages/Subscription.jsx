@@ -10,7 +10,7 @@ function Subscription() {
   useEffect(() => {
     const fetchSubscribers = async () => {
       axios
-        .get("/v1/subscriptions/u/")
+        .get(`${import.meta.env.VITE_BACKEND_URL}/v1/subscriptions/u/`)
         .then((response) => {
           console.log("res", response.data.data);
           setSubscribers(response.data.data);

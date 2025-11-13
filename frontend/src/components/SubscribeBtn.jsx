@@ -8,10 +8,10 @@ function SubscribeBtn({ username, videoId }) {
     const fetchSubscriptionStatus = async () => {
       try {
         if (username) {
-          const resp = await axios.get(`/v1/users/u/${username}`);
+          const resp = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/users/u/${username}`);
           setIsUserSubscribed(resp.data.data);
         } else if (videoId) {
-          const resp = await axios.get(`/v1/users/g/${videoId}`);
+          const resp = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/users/g/${videoId}`);
           setIsUserSubscribed(resp.data.data);
         }
       } catch (error) {
@@ -25,9 +25,9 @@ function SubscribeBtn({ username, videoId }) {
   const handleSubscribe = async () => {
     try {
       if (username) {
-        await axios.post(`/v1/subscriptions/g/${username}`);
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/v1/subscriptions/g/${username}`);
       } else if (videoId) {
-        await axios.post(`/v1/subscriptions/c/${videoId}`);
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/v1/subscriptions/c/${videoId}`);
       }
       // Toggle subscription state locally for instant feedback
       setIsUserSubscribed((prev) => !prev);

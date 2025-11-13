@@ -19,7 +19,7 @@ function Tweet() {
 
   const onSubmit = async (data) => {
     try {
-      const res = await axios.post("/v1/tweets/", data);
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/v1/tweets/`, data);
       setTweet(res.data.data);
       reset(); // clear input after posting
     } catch (err) {
@@ -30,7 +30,7 @@ function Tweet() {
   useEffect(() => {
     const fetchTweets = async () => {
       try {
-        const response = await axios.get("/v1/tweets/");
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/tweets/`);
         setTweets(response.data.data);
       } catch (error) {
         console.error("Error fetching tweets", error);

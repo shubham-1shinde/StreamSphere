@@ -13,7 +13,7 @@ function Dashboard() {
 
     const fetchProfile = async () => {
       try {
-        const res = await axios.get(`/v1/users/c/${username}`);
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/users/c/${username}`);
         if (isMounted) setProfile(res.data.data);
       } catch (error) {
         console.error("Error fetching profile:", error);

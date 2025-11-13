@@ -10,7 +10,7 @@ function DashboardTweets() {
   useEffect(() => {
     const fetchTweets = async () => {
       try {
-        const res = await axios.get(`/v1/tweets/users/${username}`);
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/tweets/users/${username}`);
         setTweets(res.data.data);
       } catch (error) {
         console.error("Error fetching tweets:", error);

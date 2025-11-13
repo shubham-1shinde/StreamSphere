@@ -16,7 +16,7 @@ function PlaylistVideos() {
     const fetchVideos = async () => {
       try {
         await axios
-          .get(`/v1/playlist/g/${playlistId}`)
+          .get(`${import.meta.env.VITE_BACKEND_URL}/v1/playlist/g/${playlistId}`)
           .then((response) => {
             if (isMounted) setVideos(response.data.data);
             console.log("Fetched videos:", response.data.data);

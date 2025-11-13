@@ -11,7 +11,7 @@ const Chats = () => {
   useEffect(() => {
     const fetchChatSidebarList = async () => {
       try {
-        const res = await axios.get("/v1/messages/");
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/messages/`);
         setChatList(res.data.data);
         console.log("Chat sidebar list fetched", res.data.data);
       } catch (err) {

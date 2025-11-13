@@ -28,7 +28,7 @@ function Signin() {
   /* ---------- submit ---------- */
   const onSubmit = async (data) => {
     try {
-      await axios.post('/v1/users/login', data);
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/v1/users/login`, data);
       setLoginDone(true);
     } catch (err) {
       console.error(err);
@@ -44,7 +44,7 @@ function Signin() {
 
     const fetchCurrentUser = async () => {
       try {
-        const { data } = await axios.get('/v1/users/current-user', {
+        const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/users/current-user`, {
           signal: controller.signal,
         });
 

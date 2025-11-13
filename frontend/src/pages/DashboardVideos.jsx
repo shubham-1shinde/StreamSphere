@@ -11,7 +11,7 @@ function DashboardVideos() {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const res = await axios.get(`/v1/videos/u/${username}`);
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/videos/u/${username}`);
         setVideos(res.data.data);
       } catch (error) {
         console.error("Error fetching videos:", error);

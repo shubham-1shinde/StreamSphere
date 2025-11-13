@@ -15,7 +15,7 @@ const WatchHistory = () => {
     const fetchVideos = async () => {
       try {
         axios
-          .get("/v1/users/history")
+          .get(`${import.meta.env.VITE_BACKEND_URL}/v1/users/history`)
           .then((response) => {
             if (isMounted) setVideos(response.data.data);
             console.log("Fetched videos:", response.data.data);

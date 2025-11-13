@@ -15,7 +15,7 @@ function LikedVideos() {
     const fetchVideos = async () => {
       try {
         await axios
-          .get("/v1/likes/videos")
+          .get(`${import.meta.env.VITE_BACKEND_URL}/v1/likes/videos`)
           .then((response) => {
             if (isMounted) setLikedVideos(response.data.data);
             console.log("Fetched videos:", response.data.data);

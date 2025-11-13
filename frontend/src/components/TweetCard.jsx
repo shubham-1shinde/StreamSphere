@@ -38,8 +38,8 @@ function TweetCard({ _id, content, fullName, username, avatar, createdAt }) {
           {/* Like */}
           <button
             onClick={async () => {
-              const res = await axios.post(`/v1/likes/toggle/t/${tweetId}`);
-              const resp = await axios.get(`/v1/likes/tweets/${tweetId}`);
+              const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/v1/likes/toggle/t/${tweetId}`);
+              const resp = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/likes/tweets/${tweetId}`);
               setTotalTweetLikes(resp.data.data);
               setIsTweetLiked(res.data.message === "Like added successfully on tweet");
             }}

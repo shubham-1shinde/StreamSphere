@@ -31,13 +31,13 @@ const Video = () => {
 
     const fetchVideo = async () => {
       try {
-        await axios.get(`/v1/videos/${videoId}`)
+        await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/videos/${videoId}`)
           .then((response) => {
             if (isMounted) setVideo(response.data.data);
           })
           .finally(() => setLoading(false));
 
-        await axios.post(`/v1/users/a/${videoId}`);
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/v1/users/a/${videoId}`);
       } catch (err) {
         console.error("Failed to fetch video:", err);
       }
@@ -45,7 +45,7 @@ const Video = () => {
 
     const fetchUpNextVideo = async () => {
       try {
-        await axios.get(`/v1/videos/upnext/${videoId}`)
+        await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/videos/upnext/${videoId}`)
           .then((response) => {
             if (isMounted) setUpNextVideos(response.data.data);
           });
@@ -56,7 +56,7 @@ const Video = () => {
 
     const fetchComment = async () => {
       try {
-        await axios.get(`/v1/comments/${videoId}`)
+        await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/comments/${videoId}`)
           .then((response) => {
             if (isMounted) setComments(response.data.data);
           });
@@ -67,8 +67,8 @@ const Video = () => {
 
     const fetchLikes = async () => {
       try {
-        const likes = await axios.get(`/v1/likes/videos/${videoId}`);
-        const isLiked = await axios.get(`/v1/likes/isliked/${videoId}`);
+        const likes = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/likes/videos/${videoId}`);
+        const isLiked = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/likes/isliked/${videoId}`);
         setVideoTotalLikes(likes.data.data);
         setisVideoLiked(isLiked.data.data);
       } catch (err) {
@@ -90,7 +90,7 @@ const Video = () => {
     const addView = async () => {
       if (!hasViewed.current) {
         try {
-          await axios.get(`/v1/videos/a/${videoId}`);
+          await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/videos/a/${videoId}`);
           hasViewed.current = true;
         } catch (err) {
           console.error("Failed to add view:", err);
@@ -101,12 +101,12 @@ const Video = () => {
   }, [videoId]);
 
   const onSubmit = async (data) => {
-    const res = await axios.post(`/v1/comments/${videoId}`, data);
+    const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/v1/comments/${videoId}`, data);
     setaddComment(res.data.data);
   };
 
   const addToPlaylistClicked = async () => {
-    await axios.get(`/v1/playlist/user/${userData._id}`)
+    await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/playlist/user/${userData._id}`)
       .then((response) => {
         setUserPlaylists(response.data.data);
       });
@@ -150,7 +150,7 @@ const Video = () => {
               <button
                 className="bg-gray-800 px-4 py-1 rounded-lg"
                 onClick={async () => {
-                  const res = await axios.post(`/v1/likes/toggle/v/${videoId}`);
+                  const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/v1/likes/toggle/v/${videoId}`);
                   setToggleLike(res.data.data);
                 }}
               >
@@ -180,7 +180,7 @@ const Video = () => {
                     <button
                       key={i}
                       onClick={async () => {
-                        await axios.patch(`/v1/playlist/add/${videoId}/${p._id}`)
+                        await axios.patch(`${import.meta.env.VITE_BACKEND_URL}/v1/playlist/add/${videoId}/${p._id}`)
                           .then((response) => console.log(response.data.data));
                       }}
                     >
@@ -222,8 +222,8 @@ const Video = () => {
                       className="bg-gray-700 px-3 py-1 rounded-lg flex gap-2 items-center"
                       onClick={async () => {
                         try {
-                          const res = await axios.post(`/v1/likes/toggle/c/${c._id}`);
-                          const likeRes = await axios.get(`/v1/likes/comments/${c._id}`);
+                          const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/v1/likes/toggle/c/${c._id}`);
+                          const likeRes = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/likes/comments/${c._id}`);
                           const updatedComments = [...comments];
                           updatedComments[i].likes = likeRes.data.data;
                           updatedComments[i].liked = res.data.message.includes("added");
@@ -240,7 +240,7 @@ const Video = () => {
                     {c.owner === userData._id && (
                       <button
                         onClick={async () => {
-                          const res = await axios.delete(`/v1/comments/c/${c._id}`);
+                          const res = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/v1/comments/c/${c._id}`);
                           setdeleteComment(res);
                         }}
                       >

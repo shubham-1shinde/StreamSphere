@@ -17,7 +17,7 @@ const ChatWindow = () => {
   useEffect(() => {
     const fetchChatWindow = async () => {
       try {
-        const res = await axios.get(`/v1/messages/${username}`);
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/messages/${username}`);
         setMessages(res.data.data);
         console.log("Fetched messages:", res.data.data);
       } catch (error) {
@@ -29,7 +29,7 @@ const ChatWindow = () => {
 
     const fetchReceiver = async () => {
       try {
-        const res = await axios.get(`/v1/messages/g/${username}`);
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/v1/messages/g/${username}`);
         setReceiverData(res.data.data);
       } catch (error) {
         console.error("Failed to fetch receiver data:", error);
@@ -42,7 +42,7 @@ const ChatWindow = () => {
 
   const onSubmit = async (data) => {
     try {
-      const res = await axios.post(`/v1/messages/${username}`, data);
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/v1/messages/${username}`, data);
       setSendedMessage(res.data.data);
     } catch (error) {
       console.error("Failed to send message:", error);

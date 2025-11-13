@@ -36,7 +36,7 @@ const MyVideoCard = ({ _id, title, views, timeAgo, username, duration, thumbnail
         <div>
           <button
             onClick={async () => {
-              const response = await axios.patch(`/v1/videos/toggle/publish/${_id}`);
+              const response = await axios.patch(`${import.meta.env.VITE_BACKEND_URL}/v1/videos/toggle/publish/${_id}`);
               setEnabled(response.data.data.isPublished);
             }}
             className={`w-14 h-8 flex items-center rounded-full p-1 duration-300 

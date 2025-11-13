@@ -10,6 +10,8 @@ export default defineConfig({
         target: 'https://my-streamsphere-backend.onrender.com',
         changeOrigin: true,
       },
+    },
   },
-  plugins: [react(),tailwindcss()],
-})
+  plugins: [react(), tailwindcss()],
+});
+

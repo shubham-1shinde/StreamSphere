@@ -40,6 +40,8 @@ const registerUser = asyncHandler( async (req, res) => {
 
     const {fullName, email, username, password } = req.body
     //console.log("email: ", email);
+    console.log("Register API called:", req.body, req.files);
+
 
     if (
         [fullName, email, username, password].some((field) => field?.trim() === "")

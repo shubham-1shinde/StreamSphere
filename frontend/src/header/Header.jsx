@@ -73,7 +73,7 @@ const Header = () => {
         )}
         {!authStatus && (
           <Link
-            to="/users/signup"
+            to="/users/register"
             className="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-indigo-500 text-white text-sm font-semibold hover:opacity-90 hover:scale-[1.03] transition-all duration-200 shadow-md"
           >
             Sign Up

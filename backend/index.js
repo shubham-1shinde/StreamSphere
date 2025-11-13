@@ -1,5 +1,30 @@
-// require('dotenv').config({path: './env'})
 import dotenv from "dotenv";
+import connectDB from "./db/database.js";
+import { app } from "./app.js";
+
+dotenv.config({ path: "./.env" });
+
+// ✅ Connect to MongoDB once (outside handler)
+await connectDB().catch((err) => {
+  console.error("❌ MongoDB connection failed:", err);
+});
+
+// ✅ Root route
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "🚀 Express backend is live on Vercel (serverless)"
+  });
+});
+
+// ✅ Export the app instead of listening (important!)
+export default app;
+
+
+
+
+// require('dotenv').config({path: './env'})
+/*import dotenv from "dotenv";
 dotenv.config({
     path: './.env'
 })
@@ -24,7 +49,7 @@ app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
 });
 
-
+*/
 /*
 
 // Example route

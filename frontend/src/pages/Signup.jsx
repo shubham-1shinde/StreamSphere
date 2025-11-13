@@ -22,7 +22,7 @@ function Signup() {
     formData.append('avatar', data.avatar[0]);
 
     try {
-      const response = await axios.post('/v1/users/register', formData);
+      const response = await axios.post('/api/v1/users/register', formData);
       if (response) {
         console.log(response.data);
         navigate('/users/login');

@@ -8,7 +8,24 @@ import { app } from "./app.js";
 
 
 
+// ✅ Connect to MongoDB
+await connectDB().catch((err) => {
+  console.error("❌ MongoDB connection failed:", err);
+});
 
+// ✅ Example route (you can remove this if you already have one)
+app.get("/", (req, res) => {
+  res.send("✅ Express backend is running successfully on Render!");
+});
+
+// ✅ Start Express server normally (Render needs this)
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server is running on port ${PORT}`);
+});
+
+
+/*
 
 // Example route
 app.get("/", (req, res) => {
@@ -26,7 +43,7 @@ export const handler = serverless(app);
 // Also export default if Vercel expects it
 export default handler;
 
-
+*/
 
 
 

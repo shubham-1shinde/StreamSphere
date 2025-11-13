@@ -6,8 +6,10 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   server: {
     proxy: {
-      '/v1': 'https://my-streamsphere-backend.onrender.com/api',  // backend mdhe routes /api/vi/...  pasun chalu hotat mnun v1 la aapn proxy sarkh use karu sakta toch v1 la frontend la as a proxy use karaych
-    },
+      '/api': {
+        target: 'https://my-streamsphere-backend.onrender.com',
+        changeOrigin: true,
+      },
   },
   plugins: [react(),tailwindcss()],
 })
